@@ -26,7 +26,7 @@ public class SellSideManager extends AbstractActor {
     @Getter
     private final HashMap<String, ActorRef> trackers = new HashMap<>();
     private final Map<RoutingMessage.SecurityExchangeRouting, NotificationMessage.Notification> statusConnections = new EnumMap<>(RoutingMessage.SecurityExchangeRouting.class);
-    private HashMap<String, IQuickFixAdapter> adapterMaps = new HashMap<>();
+    private HashMap<String, AlpacaAdapter> adapterMaps = new HashMap<>();
     private RoutingMessage.SecurityExchangeRouting securityExchange;
     private ActorRef clientManager;
     private String quickFixIniFile;
@@ -66,36 +66,9 @@ public class SellSideManager extends AbstractActor {
 
         try {
 
-            if (MainApp.getProperties().getProperty("simulador").equals("true")) {
-                IQuickFixAdapter adapter = new BCSQuickFixAdapter(statusConnections, quickFixIniFile, getSelf());
-                adapterMaps.put(exchange.name(), adapter);
-                adapterMaps.put(RoutingMessage.SecurityExchangeRouting.BINANCE.name(), adapter);
-                adapterMaps.put(RoutingMessage.SecurityExchangeRouting.CRYPTO_MARKET.name(), adapter);
-                adapterMaps.put(RoutingMessage.SecurityExchangeRouting.IB_SMART.name(), adapter);
-                adapterMaps.put(RoutingMessage.SecurityExchangeRouting.BBG.name(), adapter);
-                adapterMaps.put(RoutingMessage.SecurityExchangeRouting.MEXC.name(), adapter);
-                adapterMaps.put(RoutingMessage.SecurityExchangeRouting.MEXC.name(), adapter);
-                return;
-            }
+            AlpacaAdapter adapter = new AlpacaAdapter(statusConnections, getSelf());
+            adapterMaps.put(exchange.name(), adapter);
 
-
-            if (exchange.equals(RoutingMessage.SecurityExchangeRouting.XSGO) || exchange.equals(RoutingMessage.SecurityExchangeRouting.XSGO_OFS)) {
-                IQuickFixAdapter adapter = new BCSQuickFixAdapter(statusConnections, quickFixIniFile, getSelf());
-                adapterMaps.put(exchange.name(), adapter);
-
-            } else if (exchange.name().contains(RoutingMessage.SecurityExchangeRouting.IB_SMART.name())) {
-                //IQuickFixAdapter adapter = new IBQuickFixAdapter(statusConnections, quickFixIniFile, getSelf());
-                IQuickFixAdapter adapter = new IBAPIAdapter(getSelf());
-                adapterMaps.put(exchange.name(), adapter);
-
-            } else if (exchange.name().contains("EXECUTION")) {
-                IQuickFixAdapter adapter = new ExecutionQuickFixAdapter(statusConnections, quickFixIniFile, getSelf(), exchange.name());
-                adapterMaps.put(exchange.name(), adapter);
-
-            } else if (exchange.name().contains(RoutingMessage.SecurityExchangeRouting.ALPACA.name())) {
-                AlpacaAdapter adapter = new AlpacaAdapter(statusConnections, getSelf());
-                adapterMaps.put(exchange.name(), adapter);
-            }
 
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b2649bef-2784-4259-ae73-ddb182e08cbe" name="Changes" comment="" />
+    <list default="true" id="b2649bef-2784-4259-ae73-ddb182e08cbe" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/XRO_ALPACA.iws" beforeDir="false" afterPath="$PROJECT_DIR$/XRO_ALPACA.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/SellSideManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/SellSideManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/buyside/BuySideConnect.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/buyside/OrderManagerBuyside.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/buyside/OrderTrackerBuySide.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/util/OrderEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/util/OrderEvent.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -240,6 +247,7 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
@@ -337,7 +345,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1757002838097</updated>
-      <workItem from="1757002839228" duration="385000" />
+      <workItem from="1757002839228" duration="751000" />
     </task>
     <servers />
   </component>

@@ -23,5 +23,4 @@ public class OrderEvent {
     @JsonProperty("order")
     public Order order;
 
-    // Puedes agregar toString() para debug
 }

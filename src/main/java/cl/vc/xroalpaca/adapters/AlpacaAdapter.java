@@ -22,7 +22,7 @@ import java.util.Map;
 
 
 @lombok.extern.slf4j.Slf4j
-public class AlpacaAdapter implements IQuickFixAdapter {
+public class AlpacaAdapter {
 
     private static final String BASE_URL = "https://broker-api.sandbox.alpaca.markets/v1/accounts";
     private static final String SSE_URL = "https://broker-api.sandbox.alpaca.markets/v1/events/orders";
