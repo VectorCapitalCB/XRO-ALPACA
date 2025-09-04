@@ -1,0 +1,12 @@
+/target/
+/.settings/
+/.classpath
+/.project
+/logs
+.idea/
+.shelf/
+.ideaDataSources/
+XRO_ALPACA.iml
+XRO_ALPACA.ipr
+XRO_ALPACA.iws
+

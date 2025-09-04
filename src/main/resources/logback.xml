@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender
+            name="Console"
+            class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%date{ISO8601}] [%level] [%logger:%L] [%thread] - %msg {%mdc}%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender
+            name="TIME_BASED_FILE"
+            class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./logs/tor_console.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>./logs/tor_console.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>[%date{ISO8601}] [%level] [%logger:%L] [%thread] - %msg {%mdc}%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.hibernate" level="WARN"/>
+
+    <root level="INFO">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="TIME_BASED_FILE"/>
+    </root>
+</configuration>
