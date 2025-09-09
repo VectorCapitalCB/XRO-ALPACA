@@ -1,24 +1,20 @@
 package cl.vc.xroalpaca.adapters;
 
 import akka.actor.ActorRef;
-import cl.vc.xroalpaca.MainApp;
-import cl.vc.xroalpaca.util.OrderEvent;
 import cl.vc.module.protocolbuff.generator.IDGenerator;
 import cl.vc.module.protocolbuff.generator.TimeGenerator;
-import cl.vc.module.protocolbuff.notification.NotificationMessage;
 import cl.vc.module.protocolbuff.routing.RoutingMessage;
+import cl.vc.xroalpaca.MainApp;
+import cl.vc.xroalpaca.util.OrderEvent;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import okio.BufferedSource;
 import org.json.JSONObject;
-
-
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.Map;
 
 
 @lombok.extern.slf4j.Slf4j
@@ -26,20 +22,18 @@ public class AlpacaAdapter {
 
     private static final String BASE_URL = "https://broker-api.sandbox.alpaca.markets/v1/accounts";
     private static final String SSE_URL = "https://broker-api.sandbox.alpaca.markets/v1/events/orders";
+    public static final String URL = "https://broker-api.sandbox.alpaca.markets";
 
-    private Map<RoutingMessage.SecurityExchangeRouting, NotificationMessage.Notification> statusConnections;
     private ActorRef sellsideManager;
     private HashMap<String, RoutingMessage.Order.Builder> mapsOrders = new HashMap<>();
     private String key;
     private String secret;
 
-    public AlpacaAdapter(Map<RoutingMessage.SecurityExchangeRouting, NotificationMessage.Notification> statusConnections, ActorRef actorRef) {
+    public AlpacaAdapter(ActorRef actorRef) {
 
         try {
 
             sellsideManager = actorRef;
-            this.statusConnections = statusConnections;
-
             key = MainApp.getProperties().getProperty("alpaca.key").trim();
             secret = MainApp.getProperties().getProperty("alpaca.secreto").trim();
 
@@ -110,7 +104,10 @@ public class AlpacaAdapter {
 
                                     RoutingMessage.Order.Builder oBuilder = mapsOrders.get(event.getOrder().getClientOrderId());
                                     oBuilder.setOrderID(event.getOrder().getId());
-                                    oBuilder.setPrice(Double.parseDouble(event.getOrder().getLimitPrice()));
+                                    if(event.getOrder().getLimitPrice() != null){
+                                        oBuilder.setPrice(Double.parseDouble(event.getOrder().getLimitPrice()));
+                                    }
+
                                     oBuilder.setOrderQty(Double.parseDouble(event.getOrder().getQty()));
                                     oBuilder.setOrdStatus(RoutingMessage.OrderStatus.NEW);
                                     oBuilder.setExecType(RoutingMessage.ExecutionType.EXEC_NEW);
@@ -154,7 +151,11 @@ public class AlpacaAdapter {
                                         log.info("actualizamos order_id {}", event.getOrder().getReplacedBy());
                                     }
 
-                                    oBuilder.setPrice(Double.parseDouble(event.getOrder().getLimitPrice()));
+                                    if(event.getOrder().getLimitPrice() != null){
+                                        oBuilder.setPrice(Double.parseDouble(event.getOrder().getLimitPrice()));
+                                    }
+
+
                                     oBuilder.setOrderQty(Double.parseDouble(event.getOrder().getQty()));
                                     oBuilder.setOrdStatus(RoutingMessage.OrderStatus.REPLACED);
                                     oBuilder.setExecType(RoutingMessage.ExecutionType.EXEC_REPLACED);
@@ -231,17 +232,7 @@ public class AlpacaAdapter {
     }
 
 
-    @Override
-    public void startApplication() {
-    }
-
-    @Override
-    public void stopApplication() {
-    }
-
-
-    @Override
-    public void putNewOrderSingle(Message msg, RoutingMessage.Order orders) throws NullPointerException, SessionNotFound, FieldNotFound {
+    public void putNewOrderSingle(RoutingMessage.Order orders) throws NullPointerException {
 
         try {
 
@@ -258,10 +249,16 @@ public class AlpacaAdapter {
             json.put("qty", orders.getOrderQty());
             json.put("side", orders.getSide().name().toLowerCase());
             json.put("type", orders.getOrdType().name().toLowerCase());
-            json.put("limit_price", String.valueOf(orders.getPrice()));
+
+            if(orders.getOrdType().equals(RoutingMessage.OrdType.LIMIT)){
+                json.put("limit_price", String.valueOf(orders.getPrice()));
+            }
+
             json.put("time_in_force", "day");
-            json.put("commission", orders.getCommission());
-            json.put("commission_type", orders.getCommissionType());
+            //json.put("commission", orders.getCommission());
+            //json.put("commission_type", orders.getCommissionType());
+            //json.put("commission", "0");
+            //json.put("commission_type", "BPS");
 
             log.info("se envia orden a alpaca {}",  json.toString());
 
@@ -278,6 +275,7 @@ public class AlpacaAdapter {
 
             if (response.code() != 200) {
                 RoutingMessage.Order.Builder order = orders.toBuilder();
+                order.setTime(TimeGenerator.getTimeProto());
                 order.setExecId(IDGenerator.getID());
                 order.setOrdStatus(RoutingMessage.OrderStatus.REJECTED);
                 order.setExecType(RoutingMessage.ExecutionType.EXEC_REJECTED);
@@ -288,10 +286,8 @@ public class AlpacaAdapter {
 
             RoutingMessage.Order.Builder order = orders.toBuilder();
             mapsOrders.put(orders.getId(), order);
-            mapsOrders.put(msg.getString(ClOrdID.FIELD), order);
 
         } catch (Exception e) {
-
             log.error(e.getMessage(), e);
             RoutingMessage.Order ordersRejected = orders.toBuilder()
                     .setOrdStatus(RoutingMessage.OrderStatus.REJECTED)
@@ -305,8 +301,7 @@ public class AlpacaAdapter {
 
     }
 
-    @Override
-    public void putOrderReplace(Message msg, RoutingMessage.Order orders) throws NullPointerException, SessionNotFound, FieldNotFound {
+    public void putOrderReplace(RoutingMessage.OrderReplaceRequest msg, RoutingMessage.Order orders) throws NullPointerException {
 
         try {
 
@@ -315,21 +310,21 @@ public class AlpacaAdapter {
             String credentials = key + ":" + secret;
             String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
 
-            String cl = msg.getString(ClOrdID.FIELD);
+            //String cl = msg.getString(ClOrdID.FIELD);
 
             JSONObject json = new JSONObject();
-            json.put("qty", msg.getString(38));
+            json.put("qty", msg.getQuantity());
             json.put("time_in_force", "day");
-            json.put("limit_price", msg.getString(44));
-            json.put("trail", msg.getString(44));
+            json.put("limit_price", msg.getPrice());
+            json.put("trail", msg.getPrice());
             //json.put("client_order_id", cl);
             json.put("client_order_id", orders.getOrderID());
-            json.put("commission", orders.getCommission());
-            json.put("commission_type", orders.getCommissionType());
+            //json.put("commission", orders.getCommission());
+            //json.put("commission_type", orders.getCommissionType());
 
             log.info("remplazo enviado {}", json);
 
-            String base = "https://broker-api.sandbox.alpaca.markets";
+            String base = URL;
 
             Request request = new Request.Builder()
                     .url(base + "/v1/trading/accounts/" + orders.getAccount() + "/orders/" + orders.getOrderID())
@@ -353,7 +348,6 @@ public class AlpacaAdapter {
             RoutingMessage.Order.Builder order = orders.toBuilder();
             mapsOrders.put(orders.getId(), order);
             mapsOrders.put(orders.getOrderID(), order);
-            mapsOrders.put(cl, order);
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -361,8 +355,8 @@ public class AlpacaAdapter {
 
     }
 
-    @Override
-    public void putOrderCancel(Message msg, RoutingMessage.Order orders) throws NullPointerException, SessionNotFound, FieldNotFound {
+
+    public void putOrderCancel(RoutingMessage.OrderCancelRequest orderCancelRequest, RoutingMessage.Order orders) {
 
         try {
 

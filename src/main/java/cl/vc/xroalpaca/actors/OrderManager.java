@@ -4,10 +4,10 @@ import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.PoisonPill;
 import akka.actor.Props;
-import cl.vc.xroalpaca.MainApp;
 import cl.vc.module.protocolbuff.akka.Envelope;
 import cl.vc.module.protocolbuff.notification.NotificationMessage;
 import cl.vc.module.protocolbuff.routing.RoutingMessage;
+import cl.vc.xroalpaca.MainApp;
 import com.google.protobuf.Message;
 import io.netty.channel.Channel;
 import lombok.Value;
@@ -19,26 +19,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Slf4j
 public class OrderManager extends AbstractActor {
 
-    private static final int ACTORS_BUFFER_SIZE = 10000;
     private final HashMap<String, ActorRef> orderTrackers = new HashMap<>();
     private Channel channel;
     private ConcurrentLinkedQueue<ActorRef> availableActors = new ConcurrentLinkedQueue<>();
     private RoutingMessage.OrderCancelReject.Builder reject = RoutingMessage.OrderCancelReject.newBuilder();
 
-
     private OrderManager(Channel channel) {
         this.channel = channel;
         reject.setText("Repeated ID");
-
-        while (availableActors.size() < ACTORS_BUFFER_SIZE) {
-            if (MainApp.simulador) {
-                ActorRef newActor = getContext().actorOf(OrderTrackerSimulador.props(channel));
-                availableActors.add(newActor);
-            } else {
-                ActorRef newActor = getContext().actorOf(OrderTracker.props(channel));
-                availableActors.add(newActor);
-            }
-        }
     }
 
     public static Props props(Channel channel) {
@@ -98,25 +86,19 @@ public class OrderManager extends AbstractActor {
         channel.writeAndFlush(message);
     }
 
-    private void notifyError(Exception e) {
-        NotificationMessage.Notification notification = NotificationUtil.buildErrorNotification(MainApp.getSecurityExchange(),
-                        e.getMessage(), "OrderTrackerManager");
-        sendMessage(notification);
+
+    @Value
+    public static class Disconnect {
     }
 
     private void onClientDisconnected(Disconnect conn) {
         try {
-
-            if (!MainApp.ordercancel) {
-                return;
-            }
 
             orderTrackers.forEach((orderID, tracker) -> {
                 RoutingMessage.OrderCancelRequest cancel = RoutingMessage.OrderCancelRequest.newBuilder()
                         .setId(orderID).build();
                 tracker.tell(cancel, getSelf());
             });
-
             getSelf().tell(PoisonPill.getInstance(), getSelf());
 
         } catch (Exception e) {
@@ -134,42 +116,24 @@ public class OrderManager extends AbstractActor {
                 return;
             }
 
-            ActorRef tracker = assignOrCreateTracker();
+            ActorRef tracker = getContext().actorOf(OrderAlpacaTraker.props(channel));
             tracker.tell(newOrderRequest, getSelf());
-
             orderTrackers.put(newOrderRequest.getOrder().getId(), tracker);
 
         } catch (Exception e) {
-            notifyError(e);
             log.error(e.getMessage(), e);
         }
     }
 
-    private ActorRef assignOrCreateTracker() {
-
-        ActorRef tracker;
-
-        if (this.availableActors.isEmpty()) {
-            tracker = getContext().actorOf(OrderTracker.props(channel));
-            log.warn("No available OrderTracker, starting a new one...");
-        } else {
-            tracker = availableActors.remove();
-        }
-
-        return tracker;
-    }
 
     private void onReplaceOrderRequest(RoutingMessage.OrderReplaceRequest replaceOrderRequest) {
         try {
 
             if (orderTrackers.containsKey(replaceOrderRequest.getId())) {
                 orderTrackers.get(replaceOrderRequest.getId()).tell(replaceOrderRequest, getSelf());
-            } else {
-                MainApp.getMessageEventBus().publish(new Envelope(replaceOrderRequest.getId(), replaceOrderRequest));
             }
 
         } catch (Exception e) {
-            notifyError(e);
             log.error(e.getMessage(), e);
         }
     }
@@ -179,18 +143,13 @@ public class OrderManager extends AbstractActor {
 
             if (orderTrackers.containsKey(cancelOrderRequest.getId())) {
                 orderTrackers.get(cancelOrderRequest.getId()).tell(cancelOrderRequest, getSelf());
-            } else {
-                MainApp.getMessageEventBus().publish(new Envelope(cancelOrderRequest.getId(), cancelOrderRequest));
             }
 
         } catch (Exception e) {
-            notifyError(e);
             log.error(e.getMessage(), e);
         }
     }
 
-    @Value
-    public static class Disconnect {
-    }
+
 
 }
