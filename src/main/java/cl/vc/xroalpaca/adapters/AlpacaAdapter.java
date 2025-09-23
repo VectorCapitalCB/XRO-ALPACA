@@ -53,7 +53,9 @@ public class AlpacaAdapter {
     }
 
     public void seeEvent() {
+
         new Thread(() -> {
+
             while (true) {
 
                 OkHttpClient client = new OkHttpClient.Builder()
@@ -144,6 +146,7 @@ public class AlpacaAdapter {
 
                                 } else if ("replaced".equals(event.getOrder().getStatus())) {
 
+
                                     RoutingMessage.Order.Builder oBuilder = mapsOrders.get(event.getOrder().getClientOrderId());
 
                                     if (!event.getOrder().getReplacedBy().isEmpty()) {
@@ -151,11 +154,16 @@ public class AlpacaAdapter {
                                         log.info("actualizamos order_id {}", event.getOrder().getReplacedBy());
                                     }
 
+                                    /*
                                     if(event.getOrder().getLimitPrice() != null){
                                         oBuilder.setPrice(Double.parseDouble(event.getOrder().getLimitPrice()));
                                     }
+                                    */
 
+                                    mapsOrders.put(oBuilder.getId(), oBuilder);
+                                    sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
 
+                                    /*
                                     oBuilder.setOrderQty(Double.parseDouble(event.getOrder().getQty()));
                                     oBuilder.setOrdStatus(RoutingMessage.OrderStatus.REPLACED);
                                     oBuilder.setExecType(RoutingMessage.ExecutionType.EXEC_REPLACED);
@@ -167,8 +175,9 @@ public class AlpacaAdapter {
                                         oBuilder.setOrdStatus(RoutingMessage.OrderStatus.PARTIALLY_FILLED);
                                     }
 
-                                    mapsOrders.put(oBuilder.getId(), oBuilder);
-                                    sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
+                                    */
+
+
 
                                 } else {
                                     log.info("mensaej no procesao {}", event.getEvent());
@@ -343,11 +352,26 @@ public class AlpacaAdapter {
                 order.setText(message);
                 sellsideManager.tell(order.build(), ActorRef.noSender());
                 return;
-            }
 
-            RoutingMessage.Order.Builder order = orders.toBuilder();
-            mapsOrders.put(orders.getId(), order);
-            mapsOrders.put(orders.getOrderID(), order);
+            } else {
+
+                RoutingMessage.Order.Builder oBuilder = mapsOrders.get(orders.getId());
+                oBuilder.setOrderQty(msg.getQuantity());
+                oBuilder.setPrice(msg.getPrice());
+                oBuilder.setOrdStatus(RoutingMessage.OrderStatus.REPLACED);
+                oBuilder.setExecType(RoutingMessage.ExecutionType.EXEC_REPLACED);
+                oBuilder.setExecId(IDGenerator.getID());
+                oBuilder.setTime(TimeGenerator.getTimeProto());
+
+                if (oBuilder.getCumQty() > 0d && oBuilder.getCumQty() < oBuilder.getOrderQty()) {
+                    oBuilder.setOrdStatus(RoutingMessage.OrderStatus.PARTIALLY_FILLED);
+                }
+
+                mapsOrders.put(oBuilder.getId(), oBuilder);
+                mapsOrders.put(orders.getOrderID(), oBuilder);
+                sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
+
+            }
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -392,6 +416,7 @@ public class AlpacaAdapter {
                 ordersr.setId(order.getId());
                 ordersr.setText(message);
                 sellsideManager.tell(ordersr.build(), ActorRef.noSender());
+                log.info("rejected enviado order ID {}", idCancel);
                 return;
             }
 

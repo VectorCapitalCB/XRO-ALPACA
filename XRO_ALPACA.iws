@@ -5,21 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2649bef-2784-4259-ae73-ddb182e08cbe" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/XRO_ALPACA.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/XRO_ALPACA.ipr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/XRO_ALPACA.iws" beforeDir="false" afterPath="$PROJECT_DIR$/XRO_ALPACA.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/MainApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/OrderManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/OrderManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/OrderTracker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/OrderAlpacaTraker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/SellSideManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/SellSideManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config/FIX44.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config/sell-side-ib.ini" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config/sellside.ini" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config/setup.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/setup.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config/setup_ib.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config/simulador.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/docker-compose-ethub.yml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -252,26 +239,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.MainApp.executor": "Debug",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.32988507",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.MainApp.executor&quot;: &quot;Debug&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.32988507&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -384,7 +371,10 @@
       <option name="presentableId" value="Default" />
       <updated>1757002838097</updated>
       <workItem from="1757002839228" duration="855000" />
-      <workItem from="1757438230336" duration="6002000" />
+      <workItem from="1757438230336" duration="7857000" />
+      <workItem from="1757506308789" duration="23000" />
+      <workItem from="1757593912632" duration="3000" />
+      <workItem from="1758631476449" duration="2893000" />
     </task>
     <servers />
   </component>
@@ -483,38 +473,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>146</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>338</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>307</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>309</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/OrderAlpacaTraker.java</url>
-          <line>149</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>113</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>104</line>
-          <option name="timeStamp" value="23" />
+          <line>382</line>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
