@@ -374,7 +374,8 @@
       <workItem from="1757438230336" duration="7857000" />
       <workItem from="1757506308789" duration="23000" />
       <workItem from="1757593912632" duration="3000" />
-      <workItem from="1758631476449" duration="2893000" />
+      <workItem from="1758631476449" duration="3907000" />
+      <workItem from="1758643430685" duration="3579000" />
     </task>
     <servers />
   </component>
@@ -473,8 +474,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>382</line>
-          <option name="timeStamp" value="26" />
+          <line>394</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
+          <line>123</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

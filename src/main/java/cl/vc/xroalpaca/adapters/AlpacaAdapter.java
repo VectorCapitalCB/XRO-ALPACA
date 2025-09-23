@@ -116,6 +116,7 @@ public class AlpacaAdapter {
                                     oBuilder.setExecId(IDGenerator.getID());
                                     oBuilder.setTime(TimeGenerator.getTimeProto());
                                     mapsOrders.put(oBuilder.getId(), oBuilder);
+                                    mapsOrders.put(oBuilder.getOrderID(), oBuilder);
                                     sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
 
                                 } else if ("canceled".equals(event.getOrder().getStatus())) {
@@ -154,14 +155,19 @@ public class AlpacaAdapter {
                                         log.info("actualizamos order_id {}", event.getOrder().getReplacedBy());
                                     }
 
+                                    mapsOrders.put(oBuilder.getId(), oBuilder);
+
+
+                                    continue;
+
                                     /*
                                     if(event.getOrder().getLimitPrice() != null){
                                         oBuilder.setPrice(Double.parseDouble(event.getOrder().getLimitPrice()));
                                     }
                                     */
 
-                                    mapsOrders.put(oBuilder.getId(), oBuilder);
-                                    sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
+                                    //mapsOrders.put(oBuilder.getId(), oBuilder);
+                                    //sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
 
                                     /*
                                     oBuilder.setOrderQty(Double.parseDouble(event.getOrder().getQty()));
@@ -318,6 +324,7 @@ public class AlpacaAdapter {
 
             String credentials = key + ":" + secret;
             String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
+            RoutingMessage.Order.Builder oBuilder = mapsOrders.get(orders.getId());
 
             //String cl = msg.getString(ClOrdID.FIELD);
 
@@ -327,7 +334,7 @@ public class AlpacaAdapter {
             json.put("limit_price", msg.getPrice());
             json.put("trail", msg.getPrice());
             //json.put("client_order_id", cl);
-            json.put("client_order_id", orders.getOrderID());
+            json.put("client_order_id", oBuilder.getOrderID());
             //json.put("commission", orders.getCommission());
             //json.put("commission_type", orders.getCommissionType());
 
@@ -336,7 +343,7 @@ public class AlpacaAdapter {
             String base = URL;
 
             Request request = new Request.Builder()
-                    .url(base + "/v1/trading/accounts/" + orders.getAccount() + "/orders/" + orders.getOrderID())
+                    .url(base + "/v1/trading/accounts/" + orders.getAccount() + "/orders/" + oBuilder.getOrderID())
                     .patch(RequestBody.create(json.toString(), MediaType.parse("application/json")))
                     .addHeader("Authorization", basicAuth)
                     .addHeader("Content-Type", "application/json")
@@ -355,7 +362,6 @@ public class AlpacaAdapter {
 
             } else {
 
-                RoutingMessage.Order.Builder oBuilder = mapsOrders.get(orders.getId());
                 oBuilder.setOrderQty(msg.getQuantity());
                 oBuilder.setPrice(msg.getPrice());
                 oBuilder.setOrdStatus(RoutingMessage.OrderStatus.REPLACED);
@@ -367,7 +373,9 @@ public class AlpacaAdapter {
                     oBuilder.setOrdStatus(RoutingMessage.OrderStatus.PARTIALLY_FILLED);
                 }
 
+
                 mapsOrders.put(oBuilder.getId(), oBuilder);
+                mapsOrders.put(oBuilder.getOrderID(), oBuilder);
                 mapsOrders.put(orders.getOrderID(), oBuilder);
                 sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
 
