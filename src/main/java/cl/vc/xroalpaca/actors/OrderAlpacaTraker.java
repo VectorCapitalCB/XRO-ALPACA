@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OrderAlpacaTraker extends AbstractActor {
 
-
+    private JsonFormat.Printer printer = JsonFormat.printer().includingDefaultValueFields().omittingInsignificantWhitespace();
     private final RoutingMessage.OrderCancelReject.Builder rejectBuilder = RoutingMessage.OrderCancelReject.newBuilder();
     private Channel channel;
     private RoutingMessage.Order.Builder orderData;
@@ -160,8 +160,8 @@ public class OrderAlpacaTraker extends AbstractActor {
                 channel.writeAndFlush(orderData.build());
             }
 
-
             MainApp.getActorKafka().tell(orderData.build(), ActorRef.noSender());
+            log.info("orden enviada {}",printer.print(orderData));
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);

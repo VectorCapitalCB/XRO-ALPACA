@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b2649bef-2784-4259-ae73-ddb182e08cbe" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/XRO_ALPACA.iws" beforeDir="false" afterPath="$PROJECT_DIR$/XRO_ALPACA.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/OrderAlpacaTraker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/OrderAlpacaTraker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/setup.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/setup.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -243,11 +245,13 @@
   &quot;keyToString&quot;: {
     &quot;Application.MainApp.executor&quot;: &quot;Debug&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Remote JVM Debug.remote.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -256,6 +260,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.32988507&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -267,7 +272,7 @@
       <recent name="E:\VC-GITHUB\XRO-ALPACA\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.MainApp">
     <configuration selected="false" default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -320,6 +325,24 @@
       <option name="filePath" />
       <method v="2" />
     </configuration>
+    <configuration name="remote" type="Remote">
+      <module name="XRO_ALPACA" />
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="10.0.1.9" />
+      <option name="PORT" value="10090" />
+      <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="10090" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.MainApp" />
+      <item itemvalue="Remote JVM Debug.remote" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.MainApp" />
@@ -329,8 +352,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
-        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.28774.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.28774.11" />
       </set>
     </attachedChunks>
   </component>
@@ -375,7 +398,13 @@
       <workItem from="1757506308789" duration="23000" />
       <workItem from="1757593912632" duration="3000" />
       <workItem from="1758631476449" duration="3907000" />
-      <workItem from="1758643430685" duration="3579000" />
+      <workItem from="1758643430685" duration="9573000" />
+      <workItem from="1759755294907" duration="1523000" />
+      <workItem from="1759765794530" duration="3509000" />
+      <workItem from="1759933793391" duration="2079000" />
+      <workItem from="1762370943697" duration="699000" />
+      <workItem from="1762454402645" duration="702000" />
+      <workItem from="1762959161894" duration="2903000" />
     </task>
     <servers />
   </component>
@@ -474,13 +503,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>394</line>
-          <option name="timeStamp" value="3" />
+          <line>114</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>123</line>
-          <option name="timeStamp" value="4" />
+          <line>89</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -16,13 +16,10 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.HashMap;
 
-
 @lombok.extern.slf4j.Slf4j
 public class AlpacaAdapter {
 
-    private static final String BASE_URL = "https://broker-api.sandbox.alpaca.markets/v1/accounts";
-    private static final String SSE_URL = "https://broker-api.sandbox.alpaca.markets/v1/events/orders";
-    public static final String URL = "https://broker-api.sandbox.alpaca.markets";
+    private static String BASE = "https://broker-api.alpaca.markets";
 
     private ActorRef sellsideManager;
     private HashMap<String, RoutingMessage.Order.Builder> mapsOrders = new HashMap<>();
@@ -33,17 +30,11 @@ public class AlpacaAdapter {
 
         try {
 
+            BASE = MainApp.getProperties().getProperty("base");
+
             sellsideManager = actorRef;
             key = MainApp.getProperties().getProperty("alpaca.key").trim();
             secret = MainApp.getProperties().getProperty("alpaca.secreto").trim();
-
-            //getCLientID();
-            // connect();
-
-            cancelAllOrders("633b1575-2996-4d89-83f7-b8aa89ae2031");
-            cancelAllOrders("7824c546-4170-487f-a189-56c1efa095de");
-            cancelAllOrders("7824c546-4170-487f-a189-56c1efa095de");
-
             seeEvent();
 
         } catch (Exception e) {
@@ -60,7 +51,7 @@ public class AlpacaAdapter {
 
                 OkHttpClient client = new OkHttpClient.Builder()
                         .readTimeout(Duration.ofMinutes(5))
-                        .pingInterval(Duration.ofSeconds(5)) // mantiene viva la conexión
+                        .pingInterval(Duration.ofSeconds(5))
                         .retryOnConnectionFailure(true)
                         .build();
 
@@ -68,12 +59,12 @@ public class AlpacaAdapter {
                 String encodedAuth = Base64.getEncoder().encodeToString(credentials.getBytes());
 
                 Request request = new Request.Builder()
-                        .url("https://broker-api.sandbox.alpaca.markets/v2/events/trades")
+                        .url(BASE + "/v2/events/trades")
                         .header("Authorization", "Basic " + encodedAuth)
                         .addHeader("Accept", "text/event-stream")
                         .build();
 
-                log.info("🔁 Intentando conectar al SSE...");
+                log.info(" Intentando conectar al SSE...");
 
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) {
@@ -82,22 +73,22 @@ public class AlpacaAdapter {
                         continue;
                     }
 
-                    log.info("✅ Conectado al SSE. Esperando eventos...");
+                    log.info(" Conectado al SSE. Esperando eventos...");
 
                     try (BufferedSource source = response.body().source()) {
                         while (!source.exhausted()) {
                             String line = source.readUtf8LineStrict();
 
                             if (line.startsWith("data:")) {
-                                String jsonEvent = line.substring(5).trim();
 
+                                String jsonEvent = line.substring(5).trim();
                                 ObjectMapper mapper = new ObjectMapper();
                                 mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                                 OrderEvent event = mapper.readValue(jsonEvent, OrderEvent.class);
 
                                 if (event.getOrder().getStatus().contains("pending")) {
-                                    log.info("❌ mensaje retornado {}", event.getOrder());
-                                    continue; // no cortar el bucle
+                                    log.info(" mensaje retornado {}", event.getOrder());
+                                    continue;
                                 }
 
                                 log.info(event.getEvent());
@@ -156,34 +147,7 @@ public class AlpacaAdapter {
                                     }
 
                                     mapsOrders.put(oBuilder.getId(), oBuilder);
-
-
                                     continue;
-
-                                    /*
-                                    if(event.getOrder().getLimitPrice() != null){
-                                        oBuilder.setPrice(Double.parseDouble(event.getOrder().getLimitPrice()));
-                                    }
-                                    */
-
-                                    //mapsOrders.put(oBuilder.getId(), oBuilder);
-                                    //sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
-
-                                    /*
-                                    oBuilder.setOrderQty(Double.parseDouble(event.getOrder().getQty()));
-                                    oBuilder.setOrdStatus(RoutingMessage.OrderStatus.REPLACED);
-                                    oBuilder.setExecType(RoutingMessage.ExecutionType.EXEC_REPLACED);
-                                    oBuilder.setExecId(IDGenerator.getID());
-                                    oBuilder.setTime(TimeGenerator.getTimeProto());
-                                    oBuilder.setCumQty(Double.parseDouble(event.getOrder().getFilledQty()));
-
-                                    if (oBuilder.getCumQty() > 0d && oBuilder.getCumQty() < oBuilder.getOrderQty()) {
-                                        oBuilder.setOrdStatus(RoutingMessage.OrderStatus.PARTIALLY_FILLED);
-                                    }
-
-                                    */
-
-
 
                                 } else {
                                     log.info("mensaej no procesao {}", event.getEvent());
@@ -212,10 +176,7 @@ public class AlpacaAdapter {
             String credentials = key + ":" + secret;
             String encodedAuth = Base64.getEncoder().encodeToString(credentials.getBytes());
 
-            String url = String.format(
-                    "https://broker-api.sandbox.alpaca.markets/v1/trading/accounts/%s/orders",
-                    accountId
-            );
+            String url = String.format(BASE + "/v1/trading/accounts/%s/orders", accountId);
 
             Request request = new Request.Builder()
                     .url(url)
@@ -253,15 +214,20 @@ public class AlpacaAdapter {
 
             OkHttpClient client = new OkHttpClient();
 
-            String base = "https://broker-api.sandbox.alpaca.markets";
-
             String credentials = key + ":" + secret;
             String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
 
             JSONObject json = new JSONObject();
             json.put("client_order_id", orders.getId());
             json.put("symbol", orders.getSymbol());
-            json.put("qty", orders.getOrderQty());
+
+            if(orders.getOrderQty() == 0d){
+                log.info("se envia monto a alpaca {}",   orders.getAmount());
+                json.put("notional", orders.getAmount());
+            } else {
+                json.put("qty", orders.getOrderQty());
+            }
+
             json.put("side", orders.getSide().name().toLowerCase());
             json.put("type", orders.getOrdType().name().toLowerCase());
 
@@ -270,16 +236,12 @@ public class AlpacaAdapter {
             }
 
             json.put("time_in_force", "day");
-            //json.put("commission", orders.getCommission());
-            //json.put("commission_type", orders.getCommissionType());
-            //json.put("commission", "0");
-            //json.put("commission_type", "BPS");
+
 
             log.info("se envia orden a alpaca {}",  json.toString());
 
-
             Request request = new Request.Builder()
-                    .url(base + "/v1/trading/accounts/" + orders.getAccount() + "/orders")
+                    .url(BASE + "/v1/trading/accounts/" + orders.getAccount() + "/orders")
                     .addHeader("Authorization", basicAuth)
                     .addHeader("Content-Type", "application/json")
                     .post(RequestBody.create(json.toString(), MediaType.parse("application/json")))
@@ -327,7 +289,6 @@ public class AlpacaAdapter {
             RoutingMessage.Order.Builder oBuilder = mapsOrders.get(orders.getId());
 
             //String cl = msg.getString(ClOrdID.FIELD);
-
             JSONObject json = new JSONObject();
             json.put("qty", msg.getQuantity());
             json.put("time_in_force", "day");
@@ -340,10 +301,8 @@ public class AlpacaAdapter {
 
             log.info("remplazo enviado {}", json);
 
-            String base = URL;
-
             Request request = new Request.Builder()
-                    .url(base + "/v1/trading/accounts/" + orders.getAccount() + "/orders/" + oBuilder.getOrderID())
+                    .url(BASE + "/v1/trading/accounts/" + orders.getAccount() + "/orders/" + oBuilder.getOrderID())
                     .patch(RequestBody.create(json.toString(), MediaType.parse("application/json")))
                     .addHeader("Authorization", basicAuth)
                     .addHeader("Content-Type", "application/json")
@@ -405,7 +364,7 @@ public class AlpacaAdapter {
 
 
             String url = String.format(
-                    "https://broker-api.sandbox.alpaca.markets/v1/trading/accounts/%s/orders/%s",
+                    BASE + "/v1/trading/accounts/%s/orders/%s",
                     order.getAccount(), idCancel
             );
 
