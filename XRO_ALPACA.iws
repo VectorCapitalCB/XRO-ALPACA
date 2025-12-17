@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b2649bef-2784-4259-ae73-ddb182e08cbe" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/XRO_ALPACA.iws" beforeDir="false" afterPath="$PROJECT_DIR$/XRO_ALPACA.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/OrderAlpacaTraker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/OrderAlpacaTraker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/setup.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/setup.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,29 +239,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.MainApp.executor&quot;: &quot;Debug&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Remote JVM Debug.remote.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.32988507&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.MainApp.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Remote JVM Debug.Alpaca.executor": "Debug",
+    "Remote JVM Debug.remote.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.32988507",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -272,7 +271,7 @@
       <recent name="E:\VC-GITHUB\XRO-ALPACA\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.MainApp">
+  <component name="RunManager" selected="Remote JVM Debug.Alpaca">
     <configuration selected="false" default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -325,23 +324,23 @@
       <option name="filePath" />
       <method v="2" />
     </configuration>
-    <configuration name="remote" type="Remote">
+    <configuration name="Alpaca" type="Remote">
       <module name="XRO_ALPACA" />
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
       <option name="SHMEM_ADDRESS" />
       <option name="HOST" value="10.0.1.9" />
-      <option name="PORT" value="10090" />
+      <option name="PORT" value="10002" />
       <option name="AUTO_RESTART" value="false" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="10090" />
+        <option name="DEBUG_PORT" value="10002" />
         <option name="LOCAL" value="false" />
       </RunnerSettings>
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Application.MainApp" />
-      <item itemvalue="Remote JVM Debug.remote" />
+      <item itemvalue="Remote JVM Debug.Alpaca" />
     </list>
     <recent_temporary>
       <list>
@@ -404,7 +403,10 @@
       <workItem from="1759933793391" duration="2079000" />
       <workItem from="1762370943697" duration="699000" />
       <workItem from="1762454402645" duration="702000" />
-      <workItem from="1762959161894" duration="2903000" />
+      <workItem from="1762959161894" duration="4346000" />
+      <workItem from="1762977658931" duration="1558000" />
+      <workItem from="1763667144809" duration="616000" />
+      <workItem from="1765974955948" duration="3729000" />
     </task>
     <servers />
   </component>
@@ -503,13 +505,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>114</line>
-          <option name="timeStamp" value="4" />
+          <line>104</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>89</line>
-          <option name="timeStamp" value="12" />
+          <line>98</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

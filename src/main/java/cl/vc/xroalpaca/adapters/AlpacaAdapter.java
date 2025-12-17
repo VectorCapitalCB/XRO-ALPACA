@@ -49,6 +49,7 @@ public class AlpacaAdapter {
 
             while (true) {
 
+
                 OkHttpClient client = new OkHttpClient.Builder()
                         .readTimeout(Duration.ofMinutes(5))
                         .pingInterval(Duration.ofSeconds(5))
@@ -68,7 +69,7 @@ public class AlpacaAdapter {
 
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) {
-                        log.error("❌ Error HTTP: " + response.code());
+                        log.error("Error HTTP: " + response.code());
                         reconnectDelay();
                         continue;
                     }
@@ -101,7 +102,10 @@ public class AlpacaAdapter {
                                         oBuilder.setPrice(Double.parseDouble(event.getOrder().getLimitPrice()));
                                     }
 
-                                    oBuilder.setOrderQty(Double.parseDouble(event.getOrder().getQty()));
+                                    if(event.getOrder().getQty() != null){
+                                        oBuilder.setOrderQty(Double.parseDouble(event.getOrder().getQty()));
+                                    }
+
                                     oBuilder.setOrdStatus(RoutingMessage.OrderStatus.NEW);
                                     oBuilder.setExecType(RoutingMessage.ExecutionType.EXEC_NEW);
                                     oBuilder.setExecId(IDGenerator.getID());
@@ -153,14 +157,14 @@ public class AlpacaAdapter {
                                     log.info("mensaej no procesao {}", event.getEvent());
                                 }
 
-                                log.info("📨 Evento recibido: {}\n", jsonEvent);
+                                log.info("Evento recibido: {}\n", jsonEvent);
 
                             }
                         }
                     }
 
                 } catch (Exception e) {
-                    log.error("❌ Error SSE: " + e.getMessage());
+                    log.error("Error SSE: " + e.getMessage());
                 }
 
                 reconnectDelay();
@@ -212,14 +216,17 @@ public class AlpacaAdapter {
 
         try {
 
+
             OkHttpClient client = new OkHttpClient();
 
             String credentials = key + ":" + secret;
             String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
 
+
             JSONObject json = new JSONObject();
             json.put("client_order_id", orders.getId());
             json.put("symbol", orders.getSymbol());
+
 
             if(orders.getOrderQty() == 0d){
                 log.info("se envia monto a alpaca {}",   orders.getAmount());
@@ -236,9 +243,7 @@ public class AlpacaAdapter {
             }
 
             json.put("time_in_force", "day");
-
-
-            log.info("se envia orden a alpaca {}",  json.toString());
+            log.info("Order alpaca {}",  json.toString());
 
             Request request = new Request.Builder()
                     .url(BASE + "/v1/trading/accounts/" + orders.getAccount() + "/orders")
@@ -288,18 +293,23 @@ public class AlpacaAdapter {
             String basicAuth = "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
             RoutingMessage.Order.Builder oBuilder = mapsOrders.get(orders.getId());
 
-            //String cl = msg.getString(ClOrdID.FIELD);
             JSONObject json = new JSONObject();
-            json.put("qty", msg.getQuantity());
+           // json.put("qty", msg.getQuantity());
             json.put("time_in_force", "day");
             json.put("limit_price", msg.getPrice());
             json.put("trail", msg.getPrice());
-            //json.put("client_order_id", cl);
             json.put("client_order_id", oBuilder.getOrderID());
-            //json.put("commission", orders.getCommission());
-            //json.put("commission_type", orders.getCommissionType());
 
-            log.info("remplazo enviado {}", json);
+            if(orders.getOrderQty() == 0d){
+                log.info("se envia monto a alpaca {}",   orders.getAmount());
+                json.put("notional", orders.getAmount());
+            } else {
+                json.put("qty", orders.getOrderQty());
+            }
+
+
+
+            log.info("OrderReplaceRequest {}", json);
 
             Request request = new Request.Builder()
                     .url(BASE + "/v1/trading/accounts/" + orders.getAccount() + "/orders/" + oBuilder.getOrderID())
@@ -360,7 +370,7 @@ public class AlpacaAdapter {
 
             String idCancel = order.getOrderID();
 
-            log.info("cancel enviado order ID {}", idCancel);
+            log.info("OrderCancelRequest {}", idCancel);
 
 
             String url = String.format(
@@ -377,6 +387,7 @@ public class AlpacaAdapter {
 
             Response response = client.newCall(request).execute();
             String message = response.body().string();
+
 
             if (response.code() == 422 || response.code() == 404) {
                 RoutingMessage.OrderCancelReject.Builder ordersr = RoutingMessage.OrderCancelReject.newBuilder();
