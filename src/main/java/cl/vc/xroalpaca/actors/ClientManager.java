@@ -49,6 +49,9 @@ public class ClientManager extends AbstractActor {
 
             } else if (conn.getMessage() instanceof RoutingMessage.OrderCancelRequest) {
                 onCancelOrderRequest(conn);
+
+            } else if (conn.getMessage() instanceof RoutingMessage.OrderCancelReject) {
+                onCancelOrderReject(conn);
             }
 
 
@@ -56,6 +59,21 @@ public class ClientManager extends AbstractActor {
             log.error(e.getMessage(), e);
         }
     }
+
+    private void onCancelOrderReject(TransportingObjects conn) {
+
+        try {
+
+
+            String idconnection = conn.getCtx().channel().id().toString();
+
+            orderHasmapClient.forEach((key, value) -> value.tell(conn.getMessage(), ActorRef.noSender()));
+
+        } catch (Exception exc) {
+            log.error(exc.getMessage(), exc);
+        }
+    }
+
 
     private void onNotificationConnect(NotificationMessage.Notification msg) {
         try {

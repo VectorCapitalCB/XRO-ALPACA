@@ -110,6 +110,10 @@ public class AlpacaAdapter {
                                     oBuilder.setExecType(RoutingMessage.ExecutionType.EXEC_NEW);
                                     oBuilder.setExecId(IDGenerator.getID());
                                     oBuilder.setTime(TimeGenerator.getTimeProto());
+
+                                    double orderQty = oBuilder.getOrderQty() - oBuilder.getCumQty();
+                                    oBuilder.setLeaves(orderQty);
+
                                     mapsOrders.put(oBuilder.getId(), oBuilder);
                                     mapsOrders.put(oBuilder.getOrderID(), oBuilder);
                                     sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
@@ -123,6 +127,41 @@ public class AlpacaAdapter {
                                     oBuilder.setExecId(IDGenerator.getID());
                                     oBuilder.setTime(TimeGenerator.getTimeProto());
                                     mapsOrders.put(oBuilder.getId(), oBuilder);
+                                    sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
+
+                                } else if ("partially_filled".equals(event.getOrder().getStatus())) {
+
+                                    RoutingMessage.Order.Builder oBuilder = mapsOrders.get(event.getOrder().getClientOrderId());
+                                    if (oBuilder == null) {
+                                        log.warn("No se encontró orden para clientOrderId={}", event.getOrder().getClientOrderId());
+                                        continue;
+                                    }
+
+                                    oBuilder.setOrdStatus(RoutingMessage.OrderStatus.PARTIALLY_FILLED);
+                                    oBuilder.setExecType(RoutingMessage.ExecutionType.EXEC_TRADE);
+
+                                    if (event.getOrder().getFilledQty() != null) {
+                                        double cumQty = Double.parseDouble(event.getOrder().getFilledQty());
+                                        oBuilder.setCumQty(oBuilder.getCumQty() + cumQty);
+                                        oBuilder.setLeaves(Math.max(0d, oBuilder.getOrderQty() - cumQty));
+                                    }
+
+                                    if (event.getOrder().getFilledAvgPrice() != null) {
+                                        double avgPx = Double.parseDouble(event.getOrder().getFilledAvgPrice());
+                                        oBuilder.setAvgPrice(avgPx);
+                                        oBuilder.setLastPx(avgPx);
+                                    }
+
+                                    // Si tu evento trae la cantidad de esta ejecución parcial, úsala aquí.
+                                    // Si no la trae, puedes dejar lastQty sin tocar o calcular delta si guardas cumQty previo.
+                                    oBuilder.setExecId(IDGenerator.getID());
+                                    oBuilder.setTime(TimeGenerator.getTimeProto());
+
+                                    mapsOrders.put(oBuilder.getId(), oBuilder);
+                                    if (!oBuilder.getOrderID().isEmpty()) {
+                                        mapsOrders.put(oBuilder.getOrderID(), oBuilder);
+                                    }
+
                                     sellsideManager.tell(oBuilder.build(), ActorRef.noSender());
 
                                 } else if ("filled".equals(event.getOrder().getStatus())) {
@@ -149,6 +188,9 @@ public class AlpacaAdapter {
                                         oBuilder.setOrderID(event.getOrder().getReplacedBy());
                                         log.info("actualizamos order_id {}", event.getOrder().getReplacedBy());
                                     }
+
+                                    double orderQty = oBuilder.getOrderQty() - oBuilder.getCumQty();
+                                    oBuilder.setLeaves(orderQty);
 
                                     mapsOrders.put(oBuilder.getId(), oBuilder);
                                     continue;
@@ -294,17 +336,22 @@ public class AlpacaAdapter {
             RoutingMessage.Order.Builder oBuilder = mapsOrders.get(orders.getId());
 
             JSONObject json = new JSONObject();
-           // json.put("qty", msg.getQuantity());
+            //json.put("qty", msg.getQuantity());
             json.put("time_in_force", "day");
             json.put("limit_price", msg.getPrice());
             json.put("trail", msg.getPrice());
             json.put("client_order_id", oBuilder.getOrderID());
 
-            if(orders.getOrderQty() == 0d){
+            if(orders.getOrderQty() == 0d && msg.getAmount() > 0d){
+
                 log.info("se envia monto a alpaca {}",   orders.getAmount());
                 json.put("notional", orders.getAmount());
+
             } else {
-                json.put("qty", orders.getOrderQty());
+
+                if(oBuilder.getOrderQty() != orders.getOrderQty()){
+                    json.put("qty", orders.getOrderQty());
+                }
             }
 
 
