@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2649bef-2784-4259-ae73-ddb182e08cbe" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/XRO_ALPACA.iml" beforeDir="false" afterPath="$PROJECT_DIR$/XRO_ALPACA.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/XRO_ALPACA.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/XRO_ALPACA.ipr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/XRO_ALPACA.iws" beforeDir="false" afterPath="$PROJECT_DIR$/XRO_ALPACA.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/actors/ClientManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -395,7 +392,11 @@
       <workItem from="1773421990121" duration="29000" />
       <workItem from="1773422035455" duration="1412000" />
       <workItem from="1773426224910" duration="1845000" />
-      <workItem from="1773752422054" duration="1388000" />
+      <workItem from="1773752422054" duration="2151000" />
+      <workItem from="1773847022106" duration="690000" />
+      <workItem from="1773846187920" duration="1657000" />
+      <workItem from="1773927852433" duration="626000" />
+      <workItem from="1776693994734" duration="3966000" />
     </task>
     <servers />
   </component>
@@ -494,7 +495,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>400</line>
+          <line>408</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>

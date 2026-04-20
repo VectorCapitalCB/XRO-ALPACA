@@ -266,15 +266,17 @@ public class AlpacaAdapter {
 
 
             JSONObject json = new JSONObject();
-            json.put("client_order_id", orders.getId());
+            String clientOrderId = orders.getId().replaceAll("^[^a-zA-Z0-9]+", "");
+            json.put("client_order_id", clientOrderId);
             json.put("symbol", orders.getSymbol());
-
 
             if(orders.getOrderQty() == 0d){
                 log.info("se envia monto a alpaca {}",   orders.getAmount());
-                json.put("notional", orders.getAmount());
+                json.put("notional", String.valueOf(orders.getAmount()));
             } else {
-                json.put("qty", orders.getOrderQty());
+                double qty = orders.getOrderQty();
+                String qtyStr = (qty == Math.floor(qty)) ? String.valueOf((long) qty) : String.valueOf(qty);
+                json.put("qty", qtyStr);
             }
 
             json.put("side", orders.getSide().name().toLowerCase());
@@ -282,6 +284,12 @@ public class AlpacaAdapter {
 
             if(orders.getOrdType().equals(RoutingMessage.OrdType.LIMIT)){
                 json.put("limit_price", String.valueOf(orders.getPrice()));
+            }
+
+            String commission = orders.getCommission();
+            if (commission != null && !commission.isBlank()) {
+                json.put("commission", Double.parseDouble(commission));
+                json.put("commission_type", "bps");
             }
 
             json.put("time_in_force", "day");
