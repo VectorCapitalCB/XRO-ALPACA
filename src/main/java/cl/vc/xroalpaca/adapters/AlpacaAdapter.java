@@ -286,6 +286,9 @@ public class AlpacaAdapter {
                 json.put("limit_price", String.valueOf(orders.getPrice()));
             }
 
+            log.info("se envia precio a alpaca {}",   orders.getCommission());
+            log.info("se envia precio a alpaca {}",   orders.getCommission());
+
             String commission = orders.getCommission();
             if (commission != null && !commission.isBlank()) {
                 json.put("commission", Double.parseDouble(commission));
