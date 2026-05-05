@@ -8,6 +8,7 @@ import cl.vc.xroalpaca.MainApp;
 import cl.vc.xroalpaca.util.OrderEvent;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.protobuf.util.JsonFormat;
 import okhttp3.*;
 import okio.BufferedSource;
 import org.json.JSONObject;
@@ -25,6 +26,8 @@ public class AlpacaAdapter {
     private HashMap<String, RoutingMessage.Order.Builder> mapsOrders = new HashMap<>();
     private String key;
     private String secret;
+
+    private JsonFormat.Printer printer = JsonFormat.printer().includingDefaultValueFields().omittingInsignificantWhitespace();
 
     public AlpacaAdapter(ActorRef actorRef) {
 
@@ -279,6 +282,10 @@ public class AlpacaAdapter {
                 json.put("qty", qtyStr);
             }
 
+
+            log.info("recibe new ordermercado  {}", printer.print(orders));
+
+
             json.put("side", orders.getSide().name().toLowerCase());
             json.put("type", orders.getOrdType().name().toLowerCase());
 
@@ -286,13 +293,22 @@ public class AlpacaAdapter {
                 json.put("limit_price", String.valueOf(orders.getPrice()));
             }
 
+
             log.info("se envia precio a alpaca {}",   orders.getCommission());
-            log.info("se envia precio a alpaca {}",   orders.getCommission());
+
 
             String commission = orders.getCommission();
             if (commission != null && !commission.isBlank()) {
                 json.put("commission", Double.parseDouble(commission));
-                json.put("commission_type", "bps");
+
+                if(orders.getCommissionType().isEmpty()){
+                    json.put("commission_type", "bps");
+                } else {
+                    json.put("commission_type", orders.getCommissionType());
+                }
+
+
+
             }
 
             json.put("time_in_force", "day");

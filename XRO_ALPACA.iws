@@ -249,7 +249,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{ &quot;keyToString&quot;: { &quot;Application.MainApp.executor&quot;: &quot;Debug&quot;, &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;, &quot;Remote JVM Debug.Alpaca.executor&quot;: &quot;Debug&quot;, &quot;Remote JVM Debug.remote.executor&quot;: &quot;Debug&quot;, &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;, &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;, &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;, &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;, &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;, &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;, &quot;git-widget-placeholder&quot;: &quot;main&quot;, &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;, &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;, &quot;kotlin-language-version-configured&quot;: &quot;true&quot;, &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;, &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;, &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;, &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;, &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;, &quot;project.structure.last.edited&quot;: &quot;Project&quot;, &quot;project.structure.proportion&quot;: &quot;0.15&quot;, &quot;project.structure.side.proportion&quot;: &quot;0.32988507&quot;, &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;, &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot; } }</component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.MainApp.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Remote JVM Debug.ALPCA_PROD.executor": "Debug",
+    "Remote JVM Debug.Alpaca.executor": "Debug",
+    "Remote JVM Debug.remote.executor": "Debug",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.32988507",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -258,7 +286,7 @@
       <recent name="E:\VC-GITHUB\XRO-ALPACA\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Remote JVM Debug.Alpaca">
+  <component name="RunManager" selected="Remote JVM Debug.ALPCA_PROD">
     <configuration selected="false" default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -300,12 +328,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Alpaca" type="Remote">
+    <configuration name="ALPCA_PROD" type="Remote">
       <module name="XRO_ALPACA" />
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
       <option name="SHMEM_ADDRESS" />
       <option name="HOST" value="10.0.1.9" />
+      <option name="PORT" value="10002" />
+      <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="10002" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2" />
+    </configuration>
+    <configuration name="Alpaca" type="Remote">
+      <module name="XRO_ALPACA" />
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="172.16.0.7" />
       <option name="PORT" value="11111" />
       <option name="AUTO_RESTART" value="false" />
       <RunnerSettings RunnerId="Debug">
@@ -317,6 +359,7 @@
     <list>
       <item itemvalue="Application.MainApp" />
       <item itemvalue="Remote JVM Debug.Alpaca" />
+      <item itemvalue="Remote JVM Debug.ALPCA_PROD" />
     </list>
     <recent_temporary>
       <list>
@@ -400,7 +443,12 @@
       <workItem from="1776779511481" duration="2142000" />
       <workItem from="1776887773614" duration="476000" />
       <workItem from="1776888259751" duration="3611000" />
-      <workItem from="1777045988714" duration="1245000" />
+      <workItem from="1777045988714" duration="3084000" />
+      <workItem from="1777308429241" duration="961000" />
+      <workItem from="1777403718022" duration="1785000" />
+      <workItem from="1777407968242" duration="3183000" />
+      <workItem from="1777568257947" duration="727000" />
+      <workItem from="1777994307665" duration="559000" />
     </task>
     <servers />
   </component>
@@ -499,8 +547,28 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
-          <line>411</line>
+          <line>429</line>
           <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
+          <line>291</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
+          <line>292</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
+          <line>298</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/cl/vc/xroalpaca/adapters/AlpacaAdapter.java</url>
+          <line>288</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
